@@ -1,43 +1,74 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:08:57 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/27 11:41:06 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/27 20:24:28 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	main(int argc, char **argv, char **envp)
 {
-	int	fd_in;
-	int	fd_out;
-	int	pipefd[2];
-	int	pid;
+	int		first_cmd_ind;
+	int		cmd_ind;
+	int		pipefd[2];
+	int		pid;
 
-	if (argc != 5)
-		return (perror_n_return("invalid output:", 1));
-	fd_in = open(argv[1], O_RDONLY);
+	first_cmd_ind = init_stdio(argc, argv);
+	if (first_cmd_ind < 2)
+		return (first_cmd_ind);
+	cmd_ind = argc - 1;
+	while (cmd_ind > first_cmd_ind)
+	{
+		if (pipe(pipefd) == -1)
+			return (perror_n_return("pipe", 1));
+		pid = fork();
+		if (pid == -1)
+			return (perror_n_return("fork", 1));
+		else if (pid > 0)
+			return (parent(pipefd[0], pipefd[1], argv[cmd_ind], envp));
+		else if (pid == 0)
+		{
+			close(pipefd[0]);
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+			if (cmd_ind-- == first_cmd_ind + 1)
+				return (child(argv[first_cmd_ind], envp));
+		}
+	}
+}
+
+int	init_stdio(int argc, char **argv)
+{
+	char	*infile;
+	int		fd_in;
+	int		fd_out;
+	int		first_cmd_ind;
+
+	if (argc < 5)
+		return (perror_n_return("invalid input:", 1));
+	first_cmd_ind = 2 + (ft_strcmp(argv[1], "here_doc") == 0);
+	printf ("first cmd ind:%d\n", first_cmd_ind);
+	infile = check_heredoc(argv, first_cmd_ind);
+	if (infile == 0)
+		return (perror_n_return("here doc:", 1));
+	fd_in = open(infile, O_RDONLY);
 	if (fd_in == -1)
 		return (perror_n_return("open", 1));
-	fd_out = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (first_cmd_ind == 2)
+		fd_out = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	else
+		fd_out = open(argv[argc - 1], O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd_out == -1)
 		return (perror_n_return("open", 1));
 	dup2(fd_in, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
-	if (pipe(pipefd) == -1)
-		return (perror_n_return("pipe", 1));
-	pid = fork();
-	if (pid == -1)
-		return (perror_n_return("fork", 1));
-	else if (pid == 0)
-		return (child(pipefd[0], pipefd[1], argv[2], envp));
-	else
-		return (parent(pipefd[0], pipefd[1], argv[3], envp));
+	return (first_cmd_ind);
 }
 
 int	perror_n_return(char *str, int exit_code)
@@ -46,14 +77,11 @@ int	perror_n_return(char *str, int exit_code)
 	return (exit_code);
 }
 
-int	child(int pipefd0, int pipefd1, char *arg, char **envp)
+int	child(char *arg, char **envp)
 {
 	char	**cmd_args;
 	char	*cmd_path;
 
-	close(pipefd0);
-	dup2(pipefd1, STDOUT_FILENO);
-	close(pipefd1);
 	cmd_args = ft_split(arg, ' ');
 	if (cmd_args == 0)
 		return (close_perror_return(STDOUT_FILENO, "malloc", 1));
