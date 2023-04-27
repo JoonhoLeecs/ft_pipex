@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:09:26 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/26 16:06:33 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/27 10:43:26 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@
 # include <stdio.h>
 # include "libft/libft.h"
 
-void print_double_ptr(char **ptr);
-char *find_cmd_path(char *cmd, char **envp);
+int		perror_n_return(char *str, int exit_code);
+int		child(int pipefd0, int pipefd1, char *arg, char **envp);
+int		parent(int pipefd0, int pipefd1, char *arg, char **envp);
+int		close_perror_return(int fd, char *str, int code);
+char	*find_cmd_path(char *cmd, char **envp);
+char	**find_path_env(char **envp, char **cmd);
+char	*check_cmd_path(char *cmd, char **dirs);
+void	free_double_ptr(char **ptr);
 
 #endif

@@ -35,11 +35,11 @@ clean :
 	rm -f $(OBJECTS)
 	rm -f $(OBJECTS_BONUS)
 	rm -f $(LIBFT)
-	rm -f make_all
+# rm -f make_all
 
 fclean :
+	$(MAKE) fclean -C $(DIR_LIBFT)
 	$(MAKE) clean
-	cd $(DIR_LIBFT); $(MAKE) fclean
 	rm -f $(NAME)
 # rm -f $(NAME_BONUS)
 
