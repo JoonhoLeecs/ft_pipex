@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 13:32:16 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/27 16:55:39 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 15:01:52 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char	*nexist_name(void)
 void	write_heredoc(int fd, char *limiter)
 {
 	char	*line;
-
 
 	while (1)
 	{

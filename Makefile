@@ -6,6 +6,7 @@ SRC = pipex.c \
 		pipex2.c
 SRC_BONUS = pipex_bonus.c \
 		pipex2_bonus.c \
+		pipex3_bonus.c \
 		heredoc_bonus.c \
 		getnextline/get_next_line.c \
 		getnextline/get_next_line_utils.c \

@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:08:57 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/27 20:24:28 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 15:16:09 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	first_cmd_ind = init_stdio(argc, argv);
 	if (first_cmd_ind < 2)
 		return (first_cmd_ind);
-	cmd_ind = argc - 1;
+	cmd_ind = argc - 2;
 	while (cmd_ind > first_cmd_ind)
 	{
 		if (pipe(pipefd) == -1)
@@ -34,9 +34,7 @@ int	main(int argc, char **argv, char **envp)
 			return (parent(pipefd[0], pipefd[1], argv[cmd_ind], envp));
 		else if (pid == 0)
 		{
-			close(pipefd[0]);
-			dup2(pipefd[1], STDOUT_FILENO);
-			close(pipefd[1]);
+			setup_fd(pipefd[0], pipefd[1]);
 			if (cmd_ind-- == first_cmd_ind + 1)
 				return (child(argv[first_cmd_ind], envp));
 		}
@@ -53,7 +51,6 @@ int	init_stdio(int argc, char **argv)
 	if (argc < 5)
 		return (perror_n_return("invalid input:", 1));
 	first_cmd_ind = 2 + (ft_strcmp(argv[1], "here_doc") == 0);
-	printf ("first cmd ind:%d\n", first_cmd_ind);
 	infile = check_heredoc(argv, first_cmd_ind);
 	if (infile == 0)
 		return (perror_n_return("here doc:", 1));
@@ -71,10 +68,11 @@ int	init_stdio(int argc, char **argv)
 	return (first_cmd_ind);
 }
 
-int	perror_n_return(char *str, int exit_code)
+void	setup_fd(int pipefd0, int pipefd1)
 {
-	perror(str);
-	return (exit_code);
+	close(pipefd0);
+	dup2(pipefd1, STDOUT_FILENO);
+	close(pipefd1);
 }
 
 int	child(char *arg, char **envp)
@@ -120,11 +118,4 @@ int	parent(int pipefd0, int pipefd1, char *arg, char **envp)
 		return (127);
 	}
 	return (0);
-}
-
-int	close_perror_return(int fd, char *str, int code)
-{
-	close(fd);
-	perror(str);
-	return (code);
 }

@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:08:57 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/27 11:41:06 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 15:01:36 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **envp)
 	int	pid;
 
 	if (argc != 5)
-		return (perror_n_return("invalid output:", 1));
+		return (perror_n_return("invalid output", 1));
 	fd_in = open(argv[1], O_RDONLY);
 	if (fd_in == -1)
 		return (perror_n_return("open", 1));
