@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:09:26 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/28 15:10:09 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 15:36:22 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*check_heredoc(char **argv, int fci);
 char	*nexist_name(void);
 void	write_heredoc(int fd, char *limiter);
 char	*free_n_return(char *str);
+int		perror_free(char *str, int code, int fci, char *infile);
 int		parent(int pipefd0, int pipefd1, char *arg, char **envp);
 void	setup_fd(int pipefd0, int pipefd1);
 int		child(char *arg, char **envp);
