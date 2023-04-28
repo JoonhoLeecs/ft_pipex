@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:08:57 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/28 15:37:58 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 16:52:28 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ int	init_stdio(int argc, char **argv)
 		fd_out = open(argv[argc - 1], O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd_out == -1)
 		return (perror_free("open", 1, first_cmd_ind, infile));
-	unlink(infile);
-	free(infile);
+	clear_infile(first_cmd_ind, infile);
 	dup2(fd_in, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
 	return (first_cmd_ind);

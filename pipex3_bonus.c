@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 15:06:45 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/28 15:35:54 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 16:53:33 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,12 @@ int	perror_free(char *str, int code, int fci, char *infile)
 		free (infile);
 	perror(str);
 	return (code);
+}
+
+void	clear_infile(int fci, char *infile)
+{
+	if (fci == 2)
+		return ;
+	unlink(infile);
+	free(infile);
 }

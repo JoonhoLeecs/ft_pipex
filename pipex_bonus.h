@@ -6,7 +6,7 @@
 /*   By: joonhlee <joonhlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 08:09:26 by joonhlee          #+#    #+#             */
-/*   Updated: 2023/04/28 15:36:22 by joonhlee         ###   ########.fr       */
+/*   Updated: 2023/04/28 16:54:23 by joonhlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ char	*find_cmd_path(char *cmd, char **envp);
 char	**find_path_env(char **envp, char **cmd);
 char	*check_cmd_path(char *cmd, char **dirs);
 void	free_double_ptr(char **ptr);
+void	clear_infile(int fci, char *infile);
 
 #endif
